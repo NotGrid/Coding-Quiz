@@ -14,8 +14,19 @@
         <h3>Test your coding knowledge by trying out this timed multiple choice coding quiz.</h3>
         <h3>There will be 5 questions asked with 100 seconds on the clock. Be careful, for each wrong answer will remove 10 seconds from the timer. The game ends once you successfully answer all the questions or the timer reaches zero.</h3>
     <hr>
+    <!-- start button -->
     <button id="startbutton">Start Quiz</button>
     <button id="highscorebutton" onclick="showHighscore()">Highscores</button>
+    </div>
+    <!-- quiz buttons -->
+    <div id="quiz">
+        <div id="timer">Time Remaining: </div>
+        <div id="questions"><p>Questions</p></div>
+            <button id="a" onclick="checkAnswer('a')">A</button>
+            <button id="b" onclick="checkAnswer('b')">B</button>
+            <button id="c" onclick="checkAnswer('c')">C</button>
+            <button id="d" onclick="checkAnswer('d')">D</button>
+        <div id="results"></div>
     </div>
 
     <script src="script.js"></script>

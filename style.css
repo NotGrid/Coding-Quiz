@@ -28,3 +28,25 @@ button {
 button:hover {
     box-shadow: 5px 3px 7px rgb(75, 180, 91);
 }
+
+#startquiz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#timer {
+    background-color: rgb(99, 181, 99);
+    color: azure;
+    font-size: x-large;
+    text-shadow: 1px 1px black;
+    text-align: center;
+}
+/* hides quiz until start button is pressed */
+#quiz {
+    display: none;
+}
+/* hides results of quiz until completed */
+#results {
+    display: none;
+}
