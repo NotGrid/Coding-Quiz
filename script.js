@@ -1,3 +1,5 @@
+var quizBody = document.getElementById("quiz");
+var resultsEl = document.getElementById("results");
 var startQuizButton = document.getElementById('startbutton');
 var startQuizDiv = document.getElementById('startquiz');
 var gameoverDiv = document.getElementById("gameover");
@@ -7,8 +9,10 @@ var highscoreInputName = document.getElementById("initials");
 var finalScoreEl = document.getElementById("finalscore");
 var submitScoreBtn = document.getElementById("submitscore");
 var highscoreContainer = document.getElementById("highscorecontainer");
-var highscoreDiv = document.getElementById("highscoreage");
+var highscoreDiv = document.getElementById("highscorepage");
 var endGameBtns = document.getElementById("gameoverbuttons");
+var highscoreDisplayName = document.getElementById("highscore-initials");
+var highscoreDisplayScore = document.getElementById("highscore-score");
 var buttonA = document.getElementById('a');
 var buttonB = document.getElementById('b');
 var buttonC = document.getElementById('c');
@@ -34,7 +38,7 @@ var quizQuestions = [{
     correctAnswer: "b"
 },
 {
-    quesion: "How may elements can you apply an 'ID' attribute to?",
+    question: "How may elements can you apply an 'ID' attribute to?",
     choiceA: "2",
     choiceB: "3",
     choiceC: "Unlimited",
@@ -42,7 +46,7 @@ var quizQuestions = [{
     correctAnswer: "d"
 },
 {
-    quesion: "Which is NOT a Javascript operator?",
+    question: "Which is NOT a Javascript operator?",
     choiceA: "===",
     choiceB: "!==",
     choiceC: "@@",
@@ -50,7 +54,7 @@ var quizQuestions = [{
     correctAnswer: "c"
 },
 {
-    quesion: "Which is a JavaScript Data type?",
+    question: "Which is a JavaScript Data type?",
     choiceA: "Number",
     choiceB: "String",
     choiceC: "Object",
@@ -62,6 +66,8 @@ var currentQuestionIndex = 0;
 var finalQuestionIndex = quizQuestions.length;
 var timerInterval;
 var timeLeft = 60;
+var score = 0;
+var correct;
 
 // generates questions and answers inside the object
 function generateQuizQuestion() {
@@ -84,7 +90,7 @@ function startQuiz() {
 
     timerInterval = setInterval(function () {
         timeLeft--;
-        quizTimer.textContent = "Time left: " + timeLeft;
+        quizTimer.textContent = "Time remaining: " + timeLeft;
 
         if (timeLeft === 0) {
             clearInterval(timerInterval);
@@ -131,9 +137,65 @@ submitScoreBtn.addEventListener("click", function highscore() {
 
 });
 
+function generateHighscores() {
+    highscoreDisplayName.innerHTML = "";
+    highscoreDisplayScore.innerHTML = "";
+    var highscores = JSON.parse(localStorage.getItem("savedHighscores")) || [];
+    for (i = 0; i < highscores.length; i++) {
+        var newNameSpan = document.createElement("li");
+        var newScoreSpan = document.createElement("li");
+        newNameSpan.textContent = highscores[i].name;
+        newScoreSpan.textContent = highscores[i].score;
+        highscoreDisplayName.appendChild(newNameSpan);
+        highscoreDisplayScore.appendChild(newScoreSpan);
+    }
+}
+
+function showHighscore() {
+    startQuizDiv.style.display = "none"
+    gameoverDiv.style.display = "none";
+    highscoreContainer.style.display = "flex";
+    highscoreDiv.style.display = "block";
+    endGameBtns.style.display = "flex";
+
+    generateHighscores();
+}
+
+function clearScore() {
+    window.localStorage.clear();
+    highscoreDisplayName.textContent = "";
+    highscoreDisplayScore.textContent = "";
+}
+
+function replayQuiz() {
+    highscoreContainer.style.display = "none";
+    gameoverDiv.style.display = "none";
+    startQuizDiv.style.display = "flex";
+    timeLeft = 60;
+    score = 0;
+    currentQuestionIndex = 0;
+}
+
+function checkAnswer(answer) {
+    var penalty = 10;
+    correct = quizQuestions[currentQuestionIndex].correctAnswer;
+
+    if (answer === correct && currentQuestionIndex !== finalQuestionIndex) {
+        score++;
+        alert("Correct");
+        currentQuestionIndex++;
+        generateQuizQuestion();
+        //display in the results div that the answer is correct.
+    } else if (answer !== correct && currentQuestionIndex !== finalQuestionIndex) {
+        timeLeft = timeLeft - penalty;
+        alert("Incorrect")
+        currentQuestionIndex++;
+        generateQuizQuestion();
+        //display in the results div that the answer is wrong.
+    } else {
+        showScore();
+    }
+}
+
 startQuizButton.addEventListener('click', startQuiz);
 
-// TODO: Create Highscore function to clear highscores from local storage
-// TODO: Create highscore page to display while hiding other pages
-// TODO: Add replay function
-// TODO: Add function to check responses to answers
